@@ -32,10 +32,12 @@ code {
   cursor: pointer;
 }
 
-.btn--primary {
+.btn--primary, .btn--edit {
   background-color: var(--color-primary);
 }
 
 .btn--delete {
   background-color: var(--color-secondary);
+  margin-left: 10px;
 }
+

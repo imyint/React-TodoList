@@ -1,6 +1,6 @@
 import React from "react";
 import TodoItem from "./TodoItem/TodoItem";
-import { getTodos, addTodo, removeTodo } from "../../apis/TodoApis";
+import { getTodos, addTodo, removeTodo, updateTodo } from "../../apis/TodoApis";
 
 import "./TodoList.css";
 
@@ -24,6 +24,7 @@ class TodoList extends React.Component {
       const newTodo = {
         title: this.state.inputText,
         completed: false,
+        edit: false,
       };
 
       addTodo(newTodo).then((todo) => {
@@ -33,6 +34,19 @@ class TodoList extends React.Component {
         });
       });
     }
+  };
+
+  handleEdit = (id, field, value) => {
+    if (typeof value === "boolean") {
+      value = !value;
+    }
+    updateTodo(id, field, value).then(() => {
+      this.setState({
+        todos: this.state.todos.map((todo) => {
+          return id === todo.id ? { ...todo, [field]: value } : todo;
+        }),
+      });
+    });
   };
 
   handleDelete = (id) => {
@@ -62,7 +76,12 @@ class TodoList extends React.Component {
         </form>
         <ul className="todolist__content">
           {this.state.todos.map((todo) => (
-            <TodoItem key={todo.id} todo={todo} onDelete={this.handleDelete} />
+            <TodoItem
+              key={todo.id}
+              todo={todo}
+              onEdit={this.handleEdit}
+              onDelete={this.handleDelete}
+            />
           ))}
         </ul>
       </section>
